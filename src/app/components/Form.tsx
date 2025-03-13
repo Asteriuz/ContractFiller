@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import FloatingInput from "./FloatingInput";
+import numeroParaExtenso from "../utils/numeroParaExtenso";
 
 export default function Form() {
   const [formData, setFormData] = useState({
@@ -25,6 +26,8 @@ export default function Form() {
     cep_imovel: "",
     dia_pagamento: "",
     dia_pagamento_escrito: "",
+    valor_pagamento: "",
+    valor_escrito: "",
     numero_luz_enel: "",
     inicio_locacao: "",
     fim_locacao: "",
@@ -33,6 +36,39 @@ export default function Form() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleDebugFill = () => {
+    const debugData = {
+      nome_arquivo: "debug-contrato",
+      nome_dono: "João Silva Santos",
+      rg_dono: "12.345.678-9",
+      orgao_rg_dono: "SSP/SP",
+      cpf_dono: "123.456.789-00",
+      endereco_dono: "Rua das Flores, 123 - Centro, São Paulo/SP",
+      cep_dono: "01234-567",
+      nome_inquilino: "Maria Oliveira Souza",
+      rg_inquilino: "98.765.432-1",
+      orgao_rg_inquilino: "SSP/RJ",
+      cpf_inquilino: "987.654.321-00",
+      estado_civil: "Casado",
+      profissao: "Engenheira Civil",
+      endereco_inquilino: "Avenida Brasil, 456 - Jardins, Rio de Janeiro/RJ",
+      cep_inquilino: "21000-000",
+      endereco_imovel: "Rua Teste, 789 - Moema, São Paulo/SP",
+      cidade_imovel: "São Paulo",
+      cep_imovel: "04500-000",
+      dia_pagamento: "5",
+      dia_pagamento_escrito: numeroParaExtenso(5),
+      numero_luz_enel: "1234567890",
+      inicio_locacao: "2024-01-01",
+      fim_locacao: "2025-12-31",
+      dia_assinatura: "15",
+      mes_assinatura: "janeiro"
+    };
+
+    setFormData(debugData);
+    console.log("Formulário preenchido com dados de teste");
+  };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -221,12 +257,7 @@ export default function Form() {
             Dados do Imóvel
           </h3>
           <div className="space-y-4">
-            <FloatingInput
-              id="endereco_imovel"
-              label="Endereço completo do imóvel"
-              value={formData.endereco_imovel}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_imovel: e.target.value })}
-            />
+
             <div className="grid grid-cols-2 gap-4">
               <FloatingInput
                 id="cep_imovel"
@@ -241,6 +272,12 @@ export default function Form() {
                 onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cidade_imovel: e.target.value })}
               />
             </div>
+            <FloatingInput
+              id="endereco_imovel"
+              label="Endereço completo do imóvel"
+              value={formData.endereco_imovel}
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_imovel: e.target.value })}
+            />
           </div>
         </div>
 
@@ -253,24 +290,29 @@ export default function Form() {
             <div className="grid grid-cols-2 gap-4">
               <FloatingInput
                 id="dia_pagamento"
-                label="Dia do pagamento (número)"
+                label="Dia do pagamento"
                 type="number"
                 value={formData.dia_pagamento}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, dia_pagamento: e.target.value })}
+                max={31}
+                min={1}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const numero = parseInt(value);
+                  setFormData({
+                    ...formData,
+                    dia_pagamento: value,
+                    dia_pagamento_escrito: numeroParaExtenso(numero)
+                  });
+                }
+                }
               />
               <FloatingInput
-                id="dia_pagamento_escrito"
-                label="Dia do pagamento (por extenso)"
-                value={formData.dia_pagamento_escrito}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, dia_pagamento_escrito: e.target.value })}
+                id="numero_luz_enel"
+                label="Número da luz (ENEL)"
+                value={formData.numero_luz_enel}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, numero_luz_enel: e.target.value })}
               />
             </div>
-            <FloatingInput
-              id="numero_luz_enel"
-              label="Número da luz (ENEL)"
-              value={formData.numero_luz_enel}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, numero_luz_enel: e.target.value })}
-            />
             <div className="grid grid-cols-2 gap-4">
               <FloatingInput
                 id="inicio_locacao"
@@ -320,6 +362,15 @@ export default function Form() {
             </div>
           </div>
         </div>
+
+        <button
+          type="button"
+          onClick={handleDebugFill}
+          className="w-full cursor-pointer bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 mt-2"
+        >
+          Preencher Automaticamente (Debug)
+        </button>
+
 
         <button
           type="submit"
