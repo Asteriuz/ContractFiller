@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import FloatingInput from "./FloatingInput";
 
 export default function Form() {
   const [formData, setFormData] = useState({
+    nome_arquivo: "contrato-locacao",
     nome_dono: "",
     rg_dono: "",
     orgao_rg_dono: "",
@@ -49,7 +51,16 @@ export default function Form() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "generated-document.docx";
+
+
+      const filename = `${formData.nome_arquivo
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9çÇãÃõÕáÁéÉíÍóÓúÚâÂêÊîÎôÔûÛ ]/g, '_')
+        .replace(/\s+/g, '_')}.docx`;
+
+      a.download = filename;
+
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -69,6 +80,26 @@ export default function Form() {
         Formulário do Contrato
       </h2>
 
+      <div className="mb-8">
+        <FloatingInput
+          id="nome_arquivo"
+          label="Nome do arquivo"
+          value={formData.nome_arquivo}
+          onChange={(e) => setFormData({ ...formData, nome_arquivo: e.target.value })}
+        />
+        <p className="text-sm text-gray-500 mt-2">
+          O arquivo será salvo como: {
+            formData.nome_arquivo
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-zA-Z0-9çÇãÃõÕáéíóúâêîôûÀÈÌÒÙ ]/g, '_')
+              .replace(/\s+/g, '_')
+              .replace(/_+/g, '_')
+              .trim()
+          }.docx
+        </p>
+      </div>
+
       <div className="space-y-6">
         {/* Seção do Dono */}
         <div className="border-b pb-6">
@@ -76,74 +107,43 @@ export default function Form() {
             Dono do Imóvel
           </h3>
           <div className="space-y-4">
-            <div className="relative">
-              <input
-                type="text"
-                id="nome_dono"
-                required
-                className="block px-2.5 pb-2.5 pt-4 w-full text-md text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                value={formData.nome_dono}
-                onChange={(e) => setFormData({ ...formData, nome_dono: e.target.value })}
-              />
-              <label
-                htmlFor="nome_dono"
-                className="absolute text-md text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1"
-              >
-                Nome completo
-              </label>
-            </div>
+            <FloatingInput
+              id="nome_dono"
+              label="Nome completo"
+              value={formData.nome_dono}
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, nome_dono: e.target.value })}
+            />
             <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                required
-                placeholder="RG"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="rg_dono"
+                label="RG"
                 value={formData.rg_dono}
-                onChange={(e) =>
-                  setFormData({ ...formData, rg_dono: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, rg_dono: e.target.value })}
               />
-              <input
-                type="text"
-                required
-                placeholder="Órgão Emissor"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="orgao_rg_dono"
+                label="Órgão Emissor"
                 value={formData.orgao_rg_dono}
-                onChange={(e) =>
-                  setFormData({ ...formData, orgao_rg_dono: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, orgao_rg_dono: e.target.value })}
               />
             </div>
-            <input
-              type="text"
-              required
-              placeholder="CPF (000.000.000-00)"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="cpf_dono"
+              label="CPF"
               value={formData.cpf_dono}
-              onChange={(e) =>
-                setFormData({ ...formData, cpf_dono: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cpf_dono: e.target.value })}
             />
-            <input
-              type="text"
-              required
-              placeholder="CEP"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="cep_dono"
+              label="CEP"
               value={formData.cep_dono}
-              onChange={(e) =>
-                setFormData({ ...formData, cep_dono: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cep_dono: e.target.value })}
             />
-            <input
-              type="text"
-              required
-              placeholder="Endereço completo"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="endereco_dono"
+              label="Endereço completo"
               value={formData.endereco_dono}
-              onChange={(e) =>
-                setFormData({ ...formData, endereco_dono: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_dono: e.target.value })}
             />
           </div>
         </div>
@@ -154,59 +154,38 @@ export default function Form() {
             Inquilino
           </h3>
           <div className="space-y-4">
-            <input
-              type="text"
-              required
-              placeholder="Nome completo"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="nome_inquilino"
+              label="Nome completo"
               value={formData.nome_inquilino}
-              onChange={(e) =>
-                setFormData({ ...formData, nome_inquilino: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, nome_inquilino: e.target.value })}
             />
             <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                required
-                placeholder="RG"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="rg_inquilino"
+                label="RG"
                 value={formData.rg_inquilino}
-                onChange={(e) =>
-                  setFormData({ ...formData, rg_inquilino: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, rg_inquilino: e.target.value })}
               />
-              <input
-                type="text"
-                required
-                placeholder="Órgão Emissor"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="orgao_rg_inquilino"
+                label="Órgão Emissor"
                 value={formData.orgao_rg_inquilino}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    orgao_rg_inquilino: e.target.value,
-                  })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, orgao_rg_inquilino: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                required
-                placeholder="CPF (000.000.000-00)"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="cpf_inquilino"
+                label="CPF"
                 value={formData.cpf_inquilino}
-                onChange={(e) =>
-                  setFormData({ ...formData, cpf_inquilino: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cpf_inquilino: e.target.value })}
               />
               <select
                 required
                 className="w-full px-4 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.estado_civil}
-                onChange={(e) =>
-                  setFormData({ ...formData, estado_civil: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, estado_civil: e.target.value })}
               >
                 <option value="">Estado Civil</option>
                 <option value="Solteiro">Solteiro(a)</option>
@@ -215,35 +194,23 @@ export default function Form() {
                 <option value="Viúvo">Viúvo(a)</option>
               </select>
             </div>
-            <input
-              type="text"
-              required
-              placeholder="Profissão"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="profissao"
+              label="Profissão"
               value={formData.profissao}
-              onChange={(e) =>
-                setFormData({ ...formData, profissao: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, profissao: e.target.value })}
             />
-            <input
-              type="text"
-              required
-              placeholder="CEP"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="cep_inquilino"
+              label="CEP"
               value={formData.cep_inquilino}
-              onChange={(e) =>
-                setFormData({ ...formData, cep_inquilino: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cep_inquilino: e.target.value })}
             />
-            <input
-              type="text"
-              required
-              placeholder="Endereço completo"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="endereco_inquilino"
+              label="Endereço completo"
               value={formData.endereco_inquilino}
-              onChange={(e) =>
-                setFormData({ ...formData, endereco_inquilino: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_inquilino: e.target.value })}
             />
           </div>
         </div>
@@ -254,36 +221,24 @@ export default function Form() {
             Dados do Imóvel
           </h3>
           <div className="space-y-4">
-            <input
-              type="text"
-              required
-              placeholder="Endereço completo do imóvel"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="endereco_imovel"
+              label="Endereço completo do imóvel"
               value={formData.endereco_imovel}
-              onChange={(e) =>
-                setFormData({ ...formData, endereco_imovel: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_imovel: e.target.value })}
             />
             <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                required
-                placeholder="CEP do imóvel"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="cep_imovel"
+                label="CEP do imóvel"
                 value={formData.cep_imovel}
-                onChange={(e) =>
-                  setFormData({ ...formData, cep_imovel: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cep_imovel: e.target.value })}
               />
-              <input
-                type="text"
-                required
-                placeholder="Cidade"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="cidade_imovel"
+                label="Cidade"
                 value={formData.cidade_imovel}
-                onChange={(e) =>
-                  setFormData({ ...formData, cidade_imovel: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cidade_imovel: e.target.value })}
               />
             </div>
           </div>
@@ -296,80 +251,57 @@ export default function Form() {
           </h3>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <input
+              <FloatingInput
+                id="dia_pagamento"
+                label="Dia do pagamento (número)"
                 type="number"
-                required
-                placeholder="Dia do pagamento (número)"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.dia_pagamento}
-                onChange={(e) =>
-                  setFormData({ ...formData, dia_pagamento: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, dia_pagamento: e.target.value })}
               />
-              <input
-                type="text"
-                required
-                placeholder="Dia do pagamento (por extenso)"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              <FloatingInput
+                id="dia_pagamento_escrito"
+                label="Dia do pagamento (por extenso)"
                 value={formData.dia_pagamento_escrito}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    dia_pagamento_escrito: e.target.value,
-                  })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, dia_pagamento_escrito: e.target.value })}
               />
             </div>
-            <input
-              type="text"
-              required
-              placeholder="Número da luz (ENEL)"
-              className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <FloatingInput
+              id="numero_luz_enel"
+              label="Número da luz (ENEL)"
               value={formData.numero_luz_enel}
-              onChange={(e) =>
-                setFormData({ ...formData, numero_luz_enel: e.target.value })
-              }
+              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, numero_luz_enel: e.target.value })}
             />
             <div className="grid grid-cols-2 gap-4">
-              <input
+              <FloatingInput
+                id="inicio_locacao"
+                label="Início da Locação"
                 type="date"
-                required
-                className="w-full px-4 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.inicio_locacao}
-                onChange={(e) =>
-                  setFormData({ ...formData, inicio_locacao: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, inicio_locacao: e.target.value })}
               />
-              <input
+              <FloatingInput
+                id="fim_locacao"
+                label="Fim da Locação"
                 type="date"
-                required
-                className="w-full px-4 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.fim_locacao}
-                onChange={(e) =>
-                  setFormData({ ...formData, fim_locacao: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, fim_locacao: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <input
+              <FloatingInput
+                id="dia_assinatura"
+                label="Dia da assinatura"
                 type="number"
-                required
-                placeholder="Dia da assinatura"
                 min="1"
                 max="31"
-                className="w-full px-4 py-3 text-gray-700 placeholder-gray-500 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.dia_assinatura}
-                onChange={(e) =>
-                  setFormData({ ...formData, dia_assinatura: e.target.value })
-                }
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, dia_assinatura: e.target.value })}
               />
               <select
                 required
                 className="w-full px-4 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.mes_assinatura}
-                onChange={(e) =>
-                  setFormData({ ...formData, mes_assinatura: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, mes_assinatura: e.target.value })}
               >
                 <option value="">Mês da assinatura</option>
                 <option value="janeiro">Janeiro</option>
