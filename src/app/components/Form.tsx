@@ -4,6 +4,16 @@ import { useState } from "react";
 import FloatingInput from "./FloatingInput";
 import numeroParaExtenso from "../utils/numeroParaExtenso";
 
+import PizZip from "pizzip";
+import Docxtemplater from "docxtemplater";
+import { saveAs } from "file-saver";
+let PizZipUtils: { getBinaryContent?: any; default?: any } | null = null;
+if (typeof window !== "undefined") {
+  import("pizzip/utils/index.js").then(function (r) {
+    PizZipUtils = r;
+  });
+}
+
 export default function Form() {
   const [formData, setFormData] = useState({
     // Dados do Arquivo
@@ -81,45 +91,65 @@ export default function Form() {
     console.log("Formulário preenchido com dados de teste");
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  function loadFile(
+    url: string,
+    callback: (error: any, content: PizZip.LoadData) => void
+  ) {
+    if (PizZipUtils && PizZipUtils.getBinaryContent) {
+      PizZipUtils.getBinaryContent(url, callback);
+    } else {
+      console.error(
+        "PizZipUtils is not loaded or getBinaryContent is unavailable."
+      );
+    }
+  }
+
+  const generateDocx = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const response = await fetch("/api/generate-docx", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    loadFile(
+      "/ContractMaker/template.docx",
+      function (error: any, content: PizZip.LoadData) {
+        if (error) {
+          console.error("Error loading the file", error);
+          return;
+        }
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
+        const zip = new PizZip(content);
+        const doc = new Docxtemplater(zip, {
+          linebreaks: true,
+          paragraphLoop: true,
+        });
 
-      const filename = `${formData.nome_arquivo
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9çÇãÃõÕáÁéÉíÍóÓúÚâÂêÊîÎôÔûÛ ]/g, "_")
-        .replace(/\s+/g, "_")}.docx`;
+        try {
+          doc.render(formData);
+        } catch (error) {
+          console.error("Error rendering the document", error);
+          setIsLoading(false);
+        }
 
-      a.download = filename;
+        const out = doc.getZip().generate({
+          type: "blob",
+          mimeType:
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
 
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error("Generation failed:", error);
-    } finally {
-      setIsLoading(false);
-    }
+        const filename = `${formData.nome_arquivo
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-zA-Z0-9çÇãÃõÕáÁéÉíÍóÓúÚâÂêÊîÎôÔûÛ ]/g, "_")
+          .replace(/\s+/g, "_")}.docx`;
+
+        saveAs(out, filename);
+        setIsLoading(false);
+      }
+    );
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={generateDocx}
       className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-8 my-12"
     >
       <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
