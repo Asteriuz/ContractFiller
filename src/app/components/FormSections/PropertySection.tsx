@@ -2,6 +2,7 @@ import { FormData } from "@/types/FormData";
 import { Section } from "./Section";
 import FloatingInput from "../FormLayout/FloatingInput";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
+import { FaHome } from "react-icons/fa";
 
 interface PropertySectionProps {
   formData: FormData;
@@ -12,7 +13,10 @@ export const PropertySection = ({
   formData,
   setFormData,
 }: PropertySectionProps) => (
-  <Section title="Dados do Imóvel">
+  <Section
+    title="Dados do Imóvel"
+    icon={<FaHome className="text-3xl text-green-500" />}
+  >
     <TwoColumnGrid>
       <FloatingInput
         id="cep_imovel"

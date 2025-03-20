@@ -4,6 +4,8 @@ import numeroParaExtenso from "@/app/utils/numeroParaExtenso";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
 import FloatingInput from "../FormLayout/FloatingInput";
 import extenso from "extenso";
+import { FaFileContract } from "react-icons/fa";
+import capitalize from "@/app/utils/capitalize";
 
 interface ContractSectionProps {
   formData: FormData;
@@ -14,7 +16,10 @@ export const ContractDetailsSection = ({
   formData,
   setFormData,
 }: ContractSectionProps) => (
-  <Section title="Detalhes do Contrato">
+  <Section
+    title="Detalhes do Contrato"
+    icon={<FaFileContract className="text-3xl text-purple-500" />}
+  >
     <TwoColumnGrid>
       <FloatingInput
         id="dia_pagamento"
@@ -100,28 +105,39 @@ export const ContractDetailsSection = ({
       </select>
     </TwoColumnGrid>
 
-    <TwoColumnGrid>
-      <FloatingInput
-        id="valor_pagamento"
-        label="Valor do pagamento"
-        type="number"
-        value={formData.valor_pagamento}
-        onChange={(e) => {
-          const value = e.target.value;
-          const numero = parseInt(value);
-          setFormData({
-            ...formData,
-            valor_pagamento: value,
-            valor_escrito: extenso(numero, { mode: "currency" }),
-          });
-        }}
-      />
-      <FloatingInput
-        id="valor_escrito"
-        label="Valor por extenso"
-        value={formData.valor_escrito}
-        readOnly
-      />
-    </TwoColumnGrid>
+    <FloatingInput
+      id="valor_pagamento"
+      label="Valor do pagamento (R$)"
+      value={formData.valor_pagamento}
+      onChange={(e) => {
+        const value = e.target.value;
+        const numero = parseFloat(
+          value.replaceAll(".", "").replaceAll(",", ".")
+        );
+        setFormData({
+          ...formData,
+          valor_pagamento: value,
+          valor_escrito: capitalize(
+            extenso(numero, {
+              mode: "currency",
+              currency: { type: "BRL" },
+            })
+          ),
+        });
+      }}
+      mask={{
+        numeral: true,
+        numeralDecimalMark: ",",
+        delimiter: ".",
+        numeralDecimalScale: 2,
+      }}
+      prefix="R$"
+    />
+    {!formData.valor_escrito ||
+    formData.valor_escrito.includes("undefined") ? null : (
+      <p className="text-sm text-gray-500">
+        <strong>Extenso:</strong> {formData.valor_escrito}
+      </p>
+    )}
   </Section>
 );

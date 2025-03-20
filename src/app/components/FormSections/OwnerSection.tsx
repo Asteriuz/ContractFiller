@@ -2,6 +2,7 @@ import { FormData } from "@/types/FormData";
 import { Section } from "./Section";
 import FloatingInput from "../FormLayout/FloatingInput";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
+import { FaCrown } from "react-icons/fa";
 
 interface OwnerSectionProps {
   formData: FormData;
@@ -9,7 +10,10 @@ interface OwnerSectionProps {
 }
 
 export const OwnerSection = ({ formData, setFormData }: OwnerSectionProps) => (
-  <Section title="Dono do Imóvel">
+  <Section
+    title="Dono do Imóvel"
+    icon={<FaCrown className="text-3xl text-orange-500" />}
+  >
     <FloatingInput
       id="nome_dono"
       label="Nome completo"

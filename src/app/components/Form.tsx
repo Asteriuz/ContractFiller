@@ -11,6 +11,7 @@ import { OwnerSection } from "./FormSections/OwnerSection";
 import { TenantSection } from "./FormSections/TenantSection";
 import { PropertySection } from "./FormSections/PropertySection";
 import { ContractDetailsSection } from "./FormSections/ContractDetailsSection";
+import { FaBug, FaFileAlt, FaFileSignature } from "react-icons/fa";
 
 let PizZipUtils: { getBinaryContent?: any; default?: any } | null = null;
 if (typeof window !== "undefined") {
@@ -89,7 +90,7 @@ export default function Form() {
       dia_assinatura: "15",
       mes_assinatura: "janeiro",
       valor_pagamento: "1500",
-      valor_escrito: "mil e quinhentos reais",
+      valor_escrito: "Mil e quinhentos reais",
     };
 
     setFormData(debugData);
@@ -163,9 +164,12 @@ export default function Form() {
       onSubmit={generateDocx}
       className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-4 md:p-8 my-12"
     >
-      <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-        Formulário do Contrato
-      </h2>
+      <div className="flex items-center justify-center mb-8 gap-4">
+        <h2 className="text-3xl font-bold text-gray-800 text-center">
+          Formulário do Contrato
+        </h2>
+        <FaFileSignature className="text-4xl text-gray-800" />
+      </div>
 
       <div className="mb-8">
         <FloatingInput
@@ -191,9 +195,10 @@ export default function Form() {
         <button
           type="button"
           onClick={handleDebugFill}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
         >
-          Preencher Automaticamente (Debug)
+          Preencher Automaticamente
+          <FaBug className="inline-block ml-2" />
         </button>
 
         <button
@@ -201,7 +206,14 @@ export default function Form() {
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
           disabled={isLoading}
         >
-          {isLoading ? "Gerando..." : "Gerar o Contrato 📄"}
+          {isLoading ? (
+            "Gerando..."
+          ) : (
+            <div className="flex items-center justify-center">
+              Gerar o Contrato
+              <FaFileAlt className="inline-block ml-2" />
+            </div>
+          )}
         </button>
       </div>
     </form>

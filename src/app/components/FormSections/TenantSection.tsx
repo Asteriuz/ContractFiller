@@ -2,6 +2,7 @@ import { FormData } from "@/types/FormData";
 import { Section } from "./Section";
 import FloatingInput from "../FormLayout/FloatingInput";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
+import { FaUser } from "react-icons/fa";
 
 interface TenantSectionProps {
   formData: FormData;
@@ -12,7 +13,7 @@ export const TenantSection = ({
   formData,
   setFormData,
 }: TenantSectionProps) => (
-  <Section title="Inquilino">
+  <Section title="Inquilino" icon={<FaUser className="text-3xl text-blue-500" />}>
     <FloatingInput
       id="nome_inquilino"
       label="Nome completo"
