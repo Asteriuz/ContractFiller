@@ -6,13 +6,18 @@ import numeroParaExtenso from "../utils/numeroParaExtenso";
 
 export default function Form() {
   const [formData, setFormData] = useState({
+    // Dados do Arquivo
     nome_arquivo: "contrato-locacao",
+
+    // Dono
     nome_dono: "",
     rg_dono: "",
     orgao_rg_dono: "",
     cpf_dono: "",
     endereco_dono: "",
     cep_dono: "",
+
+    // Inquilino
     nome_inquilino: "",
     rg_inquilino: "",
     orgao_rg_inquilino: "",
@@ -21,18 +26,22 @@ export default function Form() {
     profissao: "",
     endereco_inquilino: "",
     cep_inquilino: "",
+
+    // Dados do Imóvel
     endereco_imovel: "",
     cidade_imovel: "",
     cep_imovel: "",
+
+    // Detalhes do Contrato
     dia_pagamento: "",
     dia_pagamento_escrito: "",
-    valor_pagamento: "",
-    valor_escrito: "",
     numero_luz_enel: "",
     inicio_locacao: "",
     fim_locacao: "",
     dia_assinatura: "",
     mes_assinatura: "",
+    valor_pagamento: "",
+    valor_escrito: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +72,9 @@ export default function Form() {
       inicio_locacao: "2024-01-01",
       fim_locacao: "2025-12-31",
       dia_assinatura: "15",
-      mes_assinatura: "janeiro"
+      mes_assinatura: "janeiro",
+      valor_pagamento: "1500",
+      valor_escrito: "mil e quinhentos reais",
     };
 
     setFormData(debugData);
@@ -88,12 +99,11 @@ export default function Form() {
       const a = document.createElement("a");
       a.href = url;
 
-
       const filename = `${formData.nome_arquivo
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9çÇãÃõÕáÁéÉíÍóÓúÚâÂêÊîÎôÔûÛ ]/g, '_')
-        .replace(/\s+/g, '_')}.docx`;
+        .replace(/[^a-zA-Z0-9çÇãÃõÕáÁéÉíÍóÓúÚâÂêÊîÎôÔûÛ ]/g, "_")
+        .replace(/\s+/g, "_")}.docx`;
 
       a.download = filename;
 
@@ -121,18 +131,20 @@ export default function Form() {
           id="nome_arquivo"
           label="Nome do arquivo"
           value={formData.nome_arquivo}
-          onChange={(e) => setFormData({ ...formData, nome_arquivo: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, nome_arquivo: e.target.value })
+          }
         />
         <p className="text-sm text-gray-500 mt-2">
-          O arquivo será salvo como: {
-            formData.nome_arquivo
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .replace(/[^a-zA-Z0-9çÇãÃõÕáéíóúâêîôûÀÈÌÒÙ ]/g, '_')
-              .replace(/\s+/g, '_')
-              .replace(/_+/g, '_')
-              .trim()
-          }.docx
+          O arquivo será salvo como:{" "}
+          {formData.nome_arquivo
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9çÇãÃõÕáéíóúâêîôûÀÈÌÒÙ ]/g, "_")
+            .replace(/\s+/g, "_")
+            .replace(/_+/g, "_")
+            .trim()}
+          .docx
         </p>
       </div>
 
@@ -147,39 +159,51 @@ export default function Form() {
               id="nome_dono"
               label="Nome completo"
               value={formData.nome_dono}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, nome_dono: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, nome_dono: e.target.value })
+              }
             />
             <div className="grid grid-cols-2 gap-4">
               <FloatingInput
                 id="rg_dono"
                 label="RG"
                 value={formData.rg_dono}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, rg_dono: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, rg_dono: e.target.value })
+                }
               />
               <FloatingInput
                 id="orgao_rg_dono"
                 label="Órgão Emissor"
                 value={formData.orgao_rg_dono}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, orgao_rg_dono: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, orgao_rg_dono: e.target.value })
+                }
               />
             </div>
             <FloatingInput
               id="cpf_dono"
               label="CPF"
               value={formData.cpf_dono}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cpf_dono: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, cpf_dono: e.target.value })
+              }
             />
             <FloatingInput
               id="cep_dono"
               label="CEP"
               value={formData.cep_dono}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cep_dono: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, cep_dono: e.target.value })
+              }
             />
             <FloatingInput
               id="endereco_dono"
               label="Endereço completo"
               value={formData.endereco_dono}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_dono: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, endereco_dono: e.target.value })
+              }
             />
           </div>
         </div>
@@ -194,20 +218,29 @@ export default function Form() {
               id="nome_inquilino"
               label="Nome completo"
               value={formData.nome_inquilino}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, nome_inquilino: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, nome_inquilino: e.target.value })
+              }
             />
             <div className="grid grid-cols-2 gap-4">
               <FloatingInput
                 id="rg_inquilino"
                 label="RG"
                 value={formData.rg_inquilino}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, rg_inquilino: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, rg_inquilino: e.target.value })
+                }
               />
               <FloatingInput
                 id="orgao_rg_inquilino"
                 label="Órgão Emissor"
                 value={formData.orgao_rg_inquilino}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, orgao_rg_inquilino: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({
+                    ...formData,
+                    orgao_rg_inquilino: e.target.value,
+                  })
+                }
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -215,13 +248,17 @@ export default function Form() {
                 id="cpf_inquilino"
                 label="CPF"
                 value={formData.cpf_inquilino}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cpf_inquilino: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, cpf_inquilino: e.target.value })
+                }
               />
               <select
                 required
                 className="w-full px-4 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.estado_civil}
-                onChange={(e) => setFormData({ ...formData, estado_civil: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, estado_civil: e.target.value })
+                }
               >
                 <option value="">Estado Civil</option>
                 <option value="Solteiro">Solteiro(a)</option>
@@ -234,19 +271,25 @@ export default function Form() {
               id="profissao"
               label="Profissão"
               value={formData.profissao}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, profissao: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, profissao: e.target.value })
+              }
             />
             <FloatingInput
               id="cep_inquilino"
               label="CEP"
               value={formData.cep_inquilino}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cep_inquilino: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, cep_inquilino: e.target.value })
+              }
             />
             <FloatingInput
               id="endereco_inquilino"
               label="Endereço completo"
               value={formData.endereco_inquilino}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_inquilino: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, endereco_inquilino: e.target.value })
+              }
             />
           </div>
         </div>
@@ -257,26 +300,31 @@ export default function Form() {
             Dados do Imóvel
           </h3>
           <div className="space-y-4">
-
             <div className="grid grid-cols-2 gap-4">
               <FloatingInput
                 id="cep_imovel"
                 label="CEP do imóvel"
                 value={formData.cep_imovel}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cep_imovel: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, cep_imovel: e.target.value })
+                }
               />
               <FloatingInput
                 id="cidade_imovel"
                 label="Cidade"
                 value={formData.cidade_imovel}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, cidade_imovel: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, cidade_imovel: e.target.value })
+                }
               />
             </div>
             <FloatingInput
               id="endereco_imovel"
               label="Endereço completo do imóvel"
               value={formData.endereco_imovel}
-              onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, endereco_imovel: e.target.value })}
+              onChange={(e: { target: { value: any } }) =>
+                setFormData({ ...formData, endereco_imovel: e.target.value })
+              }
             />
           </div>
         </div>
@@ -301,16 +349,17 @@ export default function Form() {
                   setFormData({
                     ...formData,
                     dia_pagamento: value,
-                    dia_pagamento_escrito: numeroParaExtenso(numero)
+                    dia_pagamento_escrito: numeroParaExtenso(numero),
                   });
-                }
-                }
+                }}
               />
               <FloatingInput
                 id="numero_luz_enel"
                 label="Número da luz (ENEL)"
                 value={formData.numero_luz_enel}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, numero_luz_enel: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, numero_luz_enel: e.target.value })
+                }
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -319,14 +368,18 @@ export default function Form() {
                 label="Início da Locação"
                 type="date"
                 value={formData.inicio_locacao}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, inicio_locacao: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, inicio_locacao: e.target.value })
+                }
               />
               <FloatingInput
                 id="fim_locacao"
                 label="Fim da Locação"
                 type="date"
                 value={formData.fim_locacao}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, fim_locacao: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, fim_locacao: e.target.value })
+                }
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -337,13 +390,17 @@ export default function Form() {
                 min="1"
                 max="31"
                 value={formData.dia_assinatura}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, dia_assinatura: e.target.value })}
+                onChange={(e: { target: { value: any } }) =>
+                  setFormData({ ...formData, dia_assinatura: e.target.value })
+                }
               />
               <select
                 required
                 className="w-full px-4 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={formData.mes_assinatura}
-                onChange={(e) => setFormData({ ...formData, mes_assinatura: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, mes_assinatura: e.target.value })
+                }
               >
                 <option value="">Mês da assinatura</option>
                 <option value="janeiro">Janeiro</option>
@@ -370,7 +427,6 @@ export default function Form() {
         >
           Preencher Automaticamente (Debug)
         </button>
-
 
         <button
           type="submit"
