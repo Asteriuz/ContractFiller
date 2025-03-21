@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     images: ["https://asteriuz.github.io/ContractFiller/thumb.png"],
   },
   alternates: {
-    canonical: "./",
+    canonical: "https://asteriuz.github.io/ContractFiller/",
   },
 };
 
