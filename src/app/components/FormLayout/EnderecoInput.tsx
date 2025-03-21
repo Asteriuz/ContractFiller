@@ -63,7 +63,6 @@ const EnderecoInput = ({
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      {/* CEP Input */}
       <div>
         <FloatingInput
           id={getField("cep")}
@@ -81,7 +80,6 @@ const EnderecoInput = ({
         )}
       </div>
 
-      {/* Logradouro */}
       <FloatingInput
         id={getField("logradouro")}
         label="Logradouro"
@@ -94,7 +92,6 @@ const EnderecoInput = ({
         }
       />
 
-      {/* Number and Complement */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <FloatingInput
           id={getField("numero")}
@@ -121,7 +118,6 @@ const EnderecoInput = ({
         />
       </div>
 
-      {/* City, State, Neighborhood */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <FloatingInput
           id={getField("cidade")}

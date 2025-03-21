@@ -210,10 +210,10 @@ export default function Form() {
   return (
     <form
       onSubmit={generateDocx}
-      className="mx-auto my-12 max-w-2xl rounded-lg bg-white p-4 shadow-lg md:p-8"
+      className="mx-auto mb-12 max-w-2xl rounded-lg bg-white p-4 shadow-lg md:p-8"
     >
       <div className="mb-8 flex items-center justify-center gap-4">
-        <h2 className="text-center text-3xl font-bold text-gray-800">
+        <h2 className="font-source-serif text-center text-3xl font-bold text-gray-800">
           Formulário do Contrato
         </h2>
         <FaFileSignature className="hidden text-4xl text-gray-800 md:block" />
