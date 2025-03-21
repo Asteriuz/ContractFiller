@@ -6,9 +6,16 @@ interface FloatingInputProps
   id: string;
   label: string;
   mask?: CleaveOptions;
+  required?: boolean;
 }
 
-const FloatingInput = ({ id, label, mask, ...props }: FloatingInputProps) => {
+const FloatingInput = ({
+  id,
+  label,
+  mask,
+  required = true,
+  ...props
+}: FloatingInputProps) => {
   return (
     <div className="relative">
       {mask ? (
@@ -18,7 +25,7 @@ const FloatingInput = ({ id, label, mask, ...props }: FloatingInputProps) => {
           {...props}
           className="text-md peer block w-full appearance-none rounded-lg border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none"
           placeholder=" "
-          required
+          required={required}
         />
       ) : (
         <input
@@ -26,7 +33,7 @@ const FloatingInput = ({ id, label, mask, ...props }: FloatingInputProps) => {
           {...props}
           className="text-md peer block w-full appearance-none rounded-lg border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none"
           placeholder=" "
-          required
+          required={required}
         />
       )}
       <label

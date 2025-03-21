@@ -1,15 +1,20 @@
 // types.ts
-export interface FormData {
-   // Dados do Arquivo
+export interface IFormData {
+  // Dados do Arquivo
   nome_arquivo: string;
 
-   // Dono
+  // Dono
   nome_dono: string;
   rg_dono: string;
   orgao_rg_dono: string;
   cpf_dono: string;
   cep_dono: string;
-  endereco_dono: string;
+  logradouro_dono: string;
+  numero_dono: string;
+  complemento_dono?: string;
+  bairro_dono: string;
+  cidade_dono: string;
+  estado_dono: string;
 
   // Inquilino
   nome_inquilino: string;
@@ -19,14 +24,23 @@ export interface FormData {
   estado_civil: string;
   profissao: string;
   cep_inquilino: string;
-  endereco_inquilino: string;
+  logradouro_inquilino: string;
+  numero_inquilino: string;
+  complemento_inquilino?: string;
+  bairro_inquilino: string;
+  cidade_inquilino: string;
+  estado_inquilino: string;
 
   // Dados do Imóvel
-  endereco_imovel: string;
   cidade_imovel: string;
   cep_imovel: string;
+  logradouro_imovel: string;
+  numero_imovel: string;
+  complemento_imovel?: string;
+  bairro_imovel: string;
+  estado_imovel: string;
 
-   // Detalhes do Contrato
+  // Detalhes do Contrato
   dia_pagamento: string;
   dia_pagamento_escrito: string;
   numero_luz_enel: string;

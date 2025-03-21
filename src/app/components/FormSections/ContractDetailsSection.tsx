@@ -1,4 +1,4 @@
-import { FormData } from "@/types/FormData";
+import { IFormData } from "@/types/IFormData";
 import { Section } from "./Section";
 import numeroParaExtenso from "@/app/utils/numeroParaExtenso";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
@@ -9,8 +9,8 @@ import capitalize from "@/app/utils/capitalize";
 import getMonthName from "@/app/utils/getMonthName";
 
 interface ContractSectionProps {
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  formData: IFormData;
+  setFormData: React.Dispatch<React.SetStateAction<IFormData>>;
 }
 
 export const ContractDetailsSection = ({
@@ -127,15 +127,21 @@ export const ContractDetailsSection = ({
         const numero = parseFloat(
           value.replaceAll(".", "").replaceAll(",", "."),
         );
+
+        let valor_escrito = "";
+
+        try {
+          valor_escrito = extenso(numero, {
+            mode: "currency",
+            currency: { type: "BRL" },
+          });
+        } catch (error) {
+          valor_escrito = "Valor inválido";
+        }
         setFormData({
           ...formData,
           valor_pagamento: value,
-          valor_escrito: capitalize(
-            extenso(numero, {
-              mode: "currency",
-              currency: { type: "BRL" },
-            }),
-          ),
+          valor_escrito: valor_escrito,
         });
       }}
       mask={{

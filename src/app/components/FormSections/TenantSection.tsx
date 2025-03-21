@@ -1,12 +1,13 @@
-import { FormData } from "@/types/FormData";
+import { IFormData } from "@/types/IFormData";
 import { Section } from "./Section";
 import FloatingInput from "../FormLayout/FloatingInput";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
 import { FaUser } from "react-icons/fa";
+import EnderecoInput from "../FormLayout/EnderecoInput";
 
 interface TenantSectionProps {
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  formData: IFormData;
+  setFormData: React.Dispatch<React.SetStateAction<IFormData>>;
 }
 
 export const TenantSection = ({
@@ -89,27 +90,10 @@ export const TenantSection = ({
       onChange={(e) => setFormData({ ...formData, profissao: e.target.value })}
     />
 
-    <FloatingInput
-      id="cep_inquilino"
-      label="CEP"
-      value={formData.cep_inquilino}
-      onChange={(e) =>
-        setFormData({ ...formData, cep_inquilino: e.target.value })
-      }
-      mask={{
-        delimiters: ["-", "-"],
-        blocks: [5, 3],
-        numericOnly: true,
-      }}
-    />
-
-    <FloatingInput
-      id="endereco_inquilino"
-      label="Endereço completo"
-      value={formData.endereco_inquilino}
-      onChange={(e) =>
-        setFormData({ ...formData, endereco_inquilino: e.target.value })
-      }
+    <EnderecoInput
+      formData={formData}
+      setFormData={setFormData}
+      prefix="inquilino"
     />
   </Section>
 );

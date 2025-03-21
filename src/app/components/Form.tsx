@@ -12,8 +12,9 @@ import { TenantSection } from "./FormSections/TenantSection";
 import { PropertySection } from "./FormSections/PropertySection";
 import { ContractDetailsSection } from "./FormSections/ContractDetailsSection";
 import { FaBug, FaFileAlt, FaFileSignature } from "react-icons/fa";
-import { get } from "http";
 import getMonthName from "../utils/getMonthName";
+import { IFormData } from "@/types/IFormData";
+import formatDate from "../utils/formatDate";
 
 let PizZipUtils: { getBinaryContent?: any; default?: any } | null = null;
 if (typeof window !== "undefined") {
@@ -25,7 +26,7 @@ if (typeof window !== "undefined") {
 export default function Form() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IFormData>({
     // Dados do Arquivo
     nome_arquivo: "contrato-locacao",
 
@@ -35,7 +36,12 @@ export default function Form() {
     orgao_rg_dono: "",
     cpf_dono: "",
     cep_dono: "",
-    endereco_dono: "",
+    logradouro_dono: "",
+    numero_dono: "",
+    complemento_dono: "",
+    bairro_dono: "",
+    cidade_dono: "",
+    estado_dono: "",
 
     // Inquilino
     nome_inquilino: "",
@@ -45,12 +51,21 @@ export default function Form() {
     estado_civil: "",
     profissao: "",
     cep_inquilino: "",
-    endereco_inquilino: "",
+    logradouro_inquilino: "",
+    numero_inquilino: "",
+    complemento_inquilino: "",
+    bairro_inquilino: "",
+    cidade_inquilino: "",
+    estado_inquilino: "",
 
     // Dados do Imóvel
-    endereco_imovel: "",
-    cidade_imovel: "",
     cep_imovel: "",
+    logradouro_imovel: "",
+    numero_imovel: "",
+    complemento_imovel: "",
+    bairro_imovel: "",
+    cidade_imovel: "",
+    estado_imovel: "",
 
     // Detalhes do Contrato
     dia_pagamento: "",
@@ -68,13 +83,21 @@ export default function Form() {
 
   const handleDebugFill = () => {
     const debugData = {
+      ...formData,
       nome_arquivo: "debug-contrato",
+
       nome_dono: "João Silva Santos",
       rg_dono: "12.345.678-9",
       orgao_rg_dono: "SSP/SP",
       cpf_dono: "123.456.789-00",
-      endereco_dono: "Rua das Flores, 123 - Centro, São Paulo/SP",
       cep_dono: "01234-567",
+      logradouro_dono: "Rua Teste",
+      numero_dono: "123",
+      complemento_dono: "Apto 456",
+      bairro_dono: "Centro",
+      cidade_dono: "São Paulo",
+      estado_dono: "SP",
+
       nome_inquilino: "Maria Oliveira Souza",
       rg_inquilino: "98.765.432-1",
       orgao_rg_inquilino: "SSP/RJ",
@@ -82,17 +105,28 @@ export default function Form() {
       estado_civil: "Casado",
       profissao: "Engenheira Civil",
       endereco_inquilino: "Avenida Brasil, 456 - Jardins, Rio de Janeiro/RJ",
-      cep_inquilino: "21000-000",
-      endereco_imovel: "Rua Teste, 789 - Moema, São Paulo/SP",
-      cidade_imovel: "São Paulo",
-      cep_imovel: "04500-000",
+      cep_inquilino: "98765-432",
+      logradouro_inquilino: "Avenida Brasil",
+      numero_inquilino: "789",
+      complemento_inquilino: "Casa 2",
+      bairro_inquilino: "Jardim das Flores",
+      cidade_inquilino: "Campinas",
+      estado_inquilino: "SP",
+
+      cep_imovel: "12345-678",
+      logradouro_imovel: "Avenida Principal",
+      numero_imovel: "123",
+      bairro_imovel: "Jardim das Flores",
+      cidade_imovel: "Campinas",
+      estado_imovel: "SP",
+
       dia_pagamento: "5",
       dia_pagamento_escrito: numeroParaExtenso(5),
       numero_luz_enel: "1234567890",
       inicio_locacao: "2024-01-01",
-      inicio_mes_locacao: getMonthName(1),
+      inicio_mes_locacao: getMonthName(1).toUpperCase(),
       fim_locacao: "2025-12-31",
-      fim_mes_locacao: getMonthName(12),
+      fim_mes_locacao: getMonthName(12).toUpperCase(),
       dia_assinatura: "15",
       mes_assinatura: "janeiro",
       valor_pagamento: "1500",
@@ -129,6 +163,14 @@ export default function Form() {
   const generateDocx = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsLoading(true);
+
+    formData.inicio_locacao = formatDate(formData.inicio_locacao);
+    formData.fim_locacao = formatDate(formData.fim_locacao);
+
+    formData.valor_pagamento = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(Number(formData.valor_pagamento));
 
     loadFile(
       "/ContractMaker/template.docx",
