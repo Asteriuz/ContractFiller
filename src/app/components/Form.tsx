@@ -34,8 +34,8 @@ export default function Form() {
     rg_dono: "",
     orgao_rg_dono: "",
     cpf_dono: "",
-    endereco_dono: "",
     cep_dono: "",
+    endereco_dono: "",
 
     // Inquilino
     nome_inquilino: "",
@@ -44,8 +44,8 @@ export default function Form() {
     cpf_inquilino: "",
     estado_civil: "",
     profissao: "",
-    endereco_inquilino: "",
     cep_inquilino: "",
+    endereco_inquilino: "",
 
     // Dados do Imóvel
     endereco_imovel: "",

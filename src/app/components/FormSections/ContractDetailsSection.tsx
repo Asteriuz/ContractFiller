@@ -56,7 +56,13 @@ export const ContractDetailsSection = ({
         type="date"
         value={formData.inicio_locacao}
         onChange={(e) =>
-          setFormData({ ...formData, inicio_locacao: e.target.value, inicio_mes_locacao: getMonthName(new Date(e.target.value).getMonth() + 1) })
+          setFormData({
+            ...formData,
+            inicio_locacao: e.target.value,
+            inicio_mes_locacao: getMonthName(
+              new Date(e.target.value).getMonth() + 1,
+            ).toUpperCase(),
+          })
         }
       />
       <FloatingInput
@@ -65,7 +71,13 @@ export const ContractDetailsSection = ({
         type="date"
         value={formData.fim_locacao}
         onChange={(e) =>
-          setFormData({ ...formData, fim_locacao: e.target.value, fim_mes_locacao: getMonthName(new Date(e.target.value).getMonth() + 1) })
+          setFormData({
+            ...formData,
+            fim_locacao: e.target.value,
+            fim_mes_locacao: getMonthName(
+              new Date(e.target.value).getMonth() + 1,
+            ).toUpperCase(),
+          })
         }
       />
     </TwoColumnGrid>
