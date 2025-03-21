@@ -13,7 +13,10 @@ export const TenantSection = ({
   formData,
   setFormData,
 }: TenantSectionProps) => (
-  <Section title="Inquilino" icon={<FaUser className="text-3xl text-blue-500" />}>
+  <Section
+    title="Inquilino"
+    icon={<FaUser className="text-3xl text-blue-500" />}
+  >
     <FloatingInput
       id="nome_inquilino"
       label="Nome completo"
@@ -63,13 +66,15 @@ export const TenantSection = ({
       />
       <select
         required
-        className="w-full px-4 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-blue-500"
         value={formData.estado_civil}
         onChange={(e) =>
           setFormData({ ...formData, estado_civil: e.target.value })
         }
       >
-        <option value="">Estado Civil</option>
+        <option value="" className="">
+          Estado Civil
+        </option>
         <option value="Solteiro">Solteiro(a)</option>
         <option value="Casado">Casado(a)</option>
         <option value="Divorciado">Divorciado(a)</option>

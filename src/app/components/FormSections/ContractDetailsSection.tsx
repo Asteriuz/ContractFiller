@@ -6,6 +6,7 @@ import FloatingInput from "../FormLayout/FloatingInput";
 import extenso from "extenso";
 import { FaFileContract } from "react-icons/fa";
 import capitalize from "@/app/utils/capitalize";
+import getMonthName from "@/app/utils/getMonthName";
 
 interface ContractSectionProps {
   formData: FormData;
@@ -55,7 +56,7 @@ export const ContractDetailsSection = ({
         type="date"
         value={formData.inicio_locacao}
         onChange={(e) =>
-          setFormData({ ...formData, inicio_locacao: e.target.value })
+          setFormData({ ...formData, inicio_locacao: e.target.value, inicio_mes_locacao: getMonthName(new Date(e.target.value).getMonth() + 1) })
         }
       />
       <FloatingInput
@@ -64,7 +65,7 @@ export const ContractDetailsSection = ({
         type="date"
         value={formData.fim_locacao}
         onChange={(e) =>
-          setFormData({ ...formData, fim_locacao: e.target.value })
+          setFormData({ ...formData, fim_locacao: e.target.value, fim_mes_locacao: getMonthName(new Date(e.target.value).getMonth() + 1) })
         }
       />
     </TwoColumnGrid>
@@ -83,7 +84,7 @@ export const ContractDetailsSection = ({
       />
       <select
         required
-        className="w-full px-2.5 py-3 text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full rounded-lg border border-gray-300 px-2.5 py-3 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-blue-500"
         value={formData.mes_assinatura}
         onChange={(e) =>
           setFormData({ ...formData, mes_assinatura: e.target.value })
@@ -112,7 +113,7 @@ export const ContractDetailsSection = ({
       onChange={(e) => {
         const value = e.target.value;
         const numero = parseFloat(
-          value.replaceAll(".", "").replaceAll(",", ".")
+          value.replaceAll(".", "").replaceAll(",", "."),
         );
         setFormData({
           ...formData,
@@ -121,7 +122,7 @@ export const ContractDetailsSection = ({
             extenso(numero, {
               mode: "currency",
               currency: { type: "BRL" },
-            })
+            }),
           ),
         });
       }}

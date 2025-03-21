@@ -12,6 +12,8 @@ import { TenantSection } from "./FormSections/TenantSection";
 import { PropertySection } from "./FormSections/PropertySection";
 import { ContractDetailsSection } from "./FormSections/ContractDetailsSection";
 import { FaBug, FaFileAlt, FaFileSignature } from "react-icons/fa";
+import { get } from "http";
+import getMonthName from "../utils/getMonthName";
 
 let PizZipUtils: { getBinaryContent?: any; default?: any } | null = null;
 if (typeof window !== "undefined") {
@@ -55,7 +57,9 @@ export default function Form() {
     dia_pagamento_escrito: "",
     numero_luz_enel: "",
     inicio_locacao: "",
+    inicio_mes_locacao: "",
     fim_locacao: "",
+    fim_mes_locacao: "",
     dia_assinatura: "",
     mes_assinatura: "",
     valor_pagamento: "",
@@ -86,7 +90,9 @@ export default function Form() {
       dia_pagamento_escrito: numeroParaExtenso(5),
       numero_luz_enel: "1234567890",
       inicio_locacao: "2024-01-01",
+      inicio_mes_locacao: getMonthName(1),
       fim_locacao: "2025-12-31",
+      fim_mes_locacao: getMonthName(12),
       dia_assinatura: "15",
       mes_assinatura: "janeiro",
       valor_pagamento: "1500",
@@ -109,13 +115,13 @@ export default function Form() {
 
   function loadFile(
     url: string,
-    callback: (error: any, content: PizZip.LoadData) => void
+    callback: (error: any, content: PizZip.LoadData) => void,
   ) {
     if (PizZipUtils && PizZipUtils.getBinaryContent) {
       PizZipUtils.getBinaryContent(url, callback);
     } else {
       console.error(
-        "PizZipUtils is not loaded or getBinaryContent is unavailable."
+        "PizZipUtils is not loaded or getBinaryContent is unavailable.",
       );
     }
   }
@@ -155,20 +161,20 @@ export default function Form() {
 
         saveAs(out, filename);
         setIsLoading(false);
-      }
+      },
     );
   };
 
   return (
     <form
       onSubmit={generateDocx}
-      className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-4 md:p-8 my-12"
+      className="mx-auto my-12 max-w-2xl rounded-lg bg-white p-4 shadow-lg md:p-8"
     >
-      <div className="flex items-center justify-center mb-8 gap-4">
-        <h2 className="text-3xl font-bold text-gray-800 text-center">
+      <div className="mb-8 flex items-center justify-center gap-4">
+        <h2 className="text-center text-3xl font-bold text-gray-800">
           Formulário do Contrato
         </h2>
-        <FaFileSignature className="text-4xl text-gray-800" />
+        <FaFileSignature className="hidden text-4xl text-gray-800 md:block" />
       </div>
 
       <div className="mb-8">
@@ -180,7 +186,7 @@ export default function Form() {
             setFormData({ ...formData, nome_arquivo: e.target.value })
           }
         />
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="mt-2 text-sm text-gray-500">
           O arquivo será salvo como:{" "}
           <strong>{formatFileName(formData.nome_arquivo)}.docx</strong>
         </p>
@@ -195,15 +201,15 @@ export default function Form() {
         <button
           type="button"
           onClick={handleDebugFill}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
+          className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white transition-colors duration-300 hover:bg-red-700"
         >
           Preencher Automaticamente
-          <FaBug className="inline-block ml-2" />
+          <FaBug className="ml-2 inline-block" />
         </button>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
+          className="w-full cursor-pointer rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors duration-300 hover:bg-blue-700"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -211,7 +217,7 @@ export default function Form() {
           ) : (
             <div className="flex items-center justify-center">
               Gerar o Contrato
-              <FaFileAlt className="inline-block ml-2" />
+              <FaFileAlt className="ml-2 inline-block" />
             </div>
           )}
         </button>

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Contract Maker',
-  description: 'Generate custom DOCX documents from templates',
+  title: "Contract Maker",
+  description: "Generate custom DOCX documents from templates",
 };
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-black vsc-initialized`}
+        className={`${geistSans.variable} ${geistMono.variable} vsc-initialized min-h-screen bg-black antialiased`}
       >
         {children}
       </body>
