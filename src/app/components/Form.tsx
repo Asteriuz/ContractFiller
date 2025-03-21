@@ -173,7 +173,7 @@ export default function Form() {
     }).format(Number(formData.valor_pagamento));
 
     loadFile(
-      "/ContractMaker/template.docx",
+      "/ContractFiller/template.docx",
       function (error: any, content: PizZip.LoadData) {
         if (error) {
           console.error("Error loading the file", error);
