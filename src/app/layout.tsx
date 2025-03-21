@@ -41,8 +41,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://asteriuz.github.io/ContractFiller/thumb.png",
-        width: 1200,
-        height: 630,
+        width: 1920,
+        height: 1080,
         alt: "Contract Filler Preview",
       },
     ],
@@ -53,6 +53,9 @@ export const metadata: Metadata = {
     description:
       "Preencha contratos de forma rápida e segura usando um modelo pré-definido.",
     images: ["https://asteriuz.github.io/ContractFiller/thumb.png"],
+  },
+  alternates: {
+    canonical: "./",
   },
 };
 

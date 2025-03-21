@@ -133,6 +133,7 @@ const EnderecoInput = ({
 
         <div className="relative">
           <select
+            aria-label="Estado"
             required
             className="h-full w-full rounded-lg border border-gray-300 px-2.5 py-3 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-blue-500"
             value={formData[getField("estado")]}

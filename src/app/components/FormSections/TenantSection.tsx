@@ -66,6 +66,7 @@ export const TenantSection = ({
         }}
       />
       <select
+        aria-label="Estado Civil"
         required
         className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-blue-500"
         value={formData.estado_civil}

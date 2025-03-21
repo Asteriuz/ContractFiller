@@ -95,6 +95,7 @@ export const ContractDetailsSection = ({
         }
       />
       <select
+        aria-label="Mês da assinatura"
         required
         className="w-full rounded-lg border border-gray-300 px-2.5 py-3 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-blue-500"
         value={formData.mes_assinatura}
