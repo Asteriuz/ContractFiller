@@ -13,10 +13,47 @@ const sourceSerif = Source_Serif_4({
   variable: "--font-source-serif",
 });
 
+{
+  /* <meta property="og:type" content="website" />
+<meta property="og:url" content="https://asteriuz.github.io/ContractFiller/" />
+<meta property="og:title" content="Contract Filler" />
+<meta property="og:description" content="Preencha contratos de forma rápida e segura usando um modelo pré-definido." />
+<meta property="og:image" content="https://metatags.io/images/meta-tags.png" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content="https://asteriuz.github.io/ContractFiller/" />
+<meta property="twitter:title" content="Contract Filler" />
+<meta property="twitter:description" content="Preencha contratos de forma rápida e segura usando um modelo pré-definido." />
+<meta property="twitter:image" content="https://metatags.io/images/meta-tags.png" /> */
+}
+
 export const metadata: Metadata = {
   title: "Contract Filler",
   description:
     "Preencha contratos de forma rápida e segura usando um modelo pré-definido.",
+  openGraph: {
+    type: "website",
+    url: "https://asteriuz.github.io/ContractFiller/",
+    title: "Contract Filler",
+    description:
+      "Preencha contratos de forma rápida e segura usando um modelo pré-definido.",
+    images: [
+      {
+        url: "https://asteriuz.github.io/ContractFiller/thumb.png",
+        width: 1200,
+        height: 630,
+        alt: "Contract Filler Preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contract Filler",
+    description:
+      "Preencha contratos de forma rápida e segura usando um modelo pré-definido.",
+    images: ["https://asteriuz.github.io/ContractFiller/thumb.png"],
+  },
 };
 
 export default function RootLayout({
