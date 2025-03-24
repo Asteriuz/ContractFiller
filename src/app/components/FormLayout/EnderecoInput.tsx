@@ -1,11 +1,11 @@
 import FloatingInput from "./FloatingInput";
-import { IFormData } from "@/types/IFormData";
+import { IFormFiancaData } from "@/types/IFormData";
 import { useState } from "react";
 import { estados } from "@/app/utils/estados";
 
 interface EnderecoInputProps {
-  formData: IFormData;
-  setFormData: React.Dispatch<React.SetStateAction<IFormData>>;
+  formData: IFormFiancaData;
+  setFormData: React.Dispatch<React.SetStateAction<IFormFiancaData>>;
   prefix: "dono" | "inquilino" | "imovel";
 }
 
@@ -26,8 +26,8 @@ const EnderecoInput = ({
   const [loading, setLoading] = useState(false);
   const [cepError, setCepError] = useState("");
 
-  const getField = (field: AddressField): keyof IFormData =>
-    `${field}_${prefix}` as keyof IFormData;
+  const getField = (field: AddressField): keyof IFormFiancaData =>
+    `${field}_${prefix}` as keyof IFormFiancaData;
 
   const handleCepChange = async (cep: string) => {
     const rawCep = cep.replace(/\D/g, "");

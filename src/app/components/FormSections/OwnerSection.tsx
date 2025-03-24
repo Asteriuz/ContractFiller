@@ -1,4 +1,4 @@
-import { IFormData } from "@/types/IFormData";
+import { IFormFiancaData } from "@/types/IFormData";
 import { Section } from "./Section";
 import FloatingInput from "../FormLayout/FloatingInput";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
@@ -6,8 +6,8 @@ import { FaCrown } from "react-icons/fa";
 import EnderecoInput from "../FormLayout/EnderecoInput";
 
 interface OwnerSectionProps {
-  formData: IFormData;
-  setFormData: React.Dispatch<React.SetStateAction<IFormData>>;
+  formData: IFormFiancaData;
+  setFormData: React.Dispatch<React.SetStateAction<IFormFiancaData>>;
 }
 
 export const OwnerSection = ({ formData, setFormData }: OwnerSectionProps) => (

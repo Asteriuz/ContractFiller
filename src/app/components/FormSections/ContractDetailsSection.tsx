@@ -1,4 +1,4 @@
-import { IFormData } from "@/types/IFormData";
+import { IFormFiancaData } from "@/types/IFormData";
 import { Section } from "./Section";
 import numeroParaExtenso from "@/app/utils/numeroParaExtenso";
 import { TwoColumnGrid } from "../FormLayout/TwoColumnGrid";
@@ -9,8 +9,8 @@ import capitalize from "@/app/utils/capitalize";
 import getMonthName from "@/app/utils/getMonthName";
 
 interface ContractSectionProps {
-  formData: IFormData;
-  setFormData: React.Dispatch<React.SetStateAction<IFormData>>;
+  formData: IFormFiancaData;
+  setFormData: React.Dispatch<React.SetStateAction<IFormFiancaData>>;
 }
 
 export const ContractDetailsSection = ({
@@ -24,9 +24,9 @@ export const ContractDetailsSection = ({
     <TwoColumnGrid>
       <FloatingInput
         id="dia_pagamento"
-        label="Dia do pagamento"
+        label="Dia PGT do aluguel"
         type="number"
-        value={formData.dia_pagamento}
+        value={formData.dia_pagamento_aluguel}
         max={31}
         min={1}
         onChange={(e) => {
@@ -34,19 +34,51 @@ export const ContractDetailsSection = ({
           const numero = parseInt(value);
           setFormData({
             ...formData,
-            dia_pagamento: value,
+            dia_pagamento_aluguel: value,
             dia_pagamento_escrito: numeroParaExtenso(numero),
           });
         }}
       />
       <FloatingInput
-        id="numero_luz_enel"
-        label="Número da luz (ENEL)"
-        value={formData.numero_luz_enel}
-        onChange={(e) =>
-          setFormData({ ...formData, numero_luz_enel: e.target.value })
-        }
+        id="valor_pagamento"
+        label="Valor do aluguel (R$)"
+        value={formData.valor_aluguel}
+        onChange={(e) => {
+          const value = e.target.value;
+          const numero = parseFloat(
+            value.replaceAll(".", "").replaceAll(",", "."),
+          );
+
+          let valor_escrito = "";
+
+          try {
+            valor_escrito = extenso(numero, {
+              mode: "currency",
+              currency: { type: "BRL" },
+            });
+          } catch (error) {
+            valor_escrito = "Valor inválido";
+          }
+          setFormData({
+            ...formData,
+            valor_aluguel: value,
+            valor_aluguel_escrito: valor_escrito,
+          });
+        }}
+        mask={{
+          numeral: true,
+          numeralDecimalMark: ",",
+          delimiter: ".",
+          numeralDecimalScale: 2,
+        }}
+        prefix="R$"
       />
+      {/* {!formData.valor_aluguel_escrito ||
+      formData.valor_aluguel_escrito.includes("undefined") ? null : (
+        <p className="text-sm text-gray-500 -mt-2 mb-2">
+          <strong>Extenso:</strong> {formData.valor_aluguel_escrito}
+        </p>
+      )} */}
     </TwoColumnGrid>
 
     <TwoColumnGrid>
@@ -77,6 +109,28 @@ export const ContractDetailsSection = ({
             fim_mes_locacao: getMonthName(
               new Date(e.target.value).getMonth() + 1,
             ).toUpperCase(),
+          })
+        }
+      />
+    </TwoColumnGrid>
+    <TwoColumnGrid>
+      <FloatingInput
+        id="numero_luz_enel"
+        label="Número da luz (ENEL)"
+        value={formData.numero_luz_enel}
+        onChange={(e) =>
+          setFormData({ ...formData, numero_luz_enel: e.target.value })
+        }
+      />
+      <FloatingInput
+        id="data_seguro_fianca"
+        label="Data Seguro Fiança"
+        type="date"
+        value={formData.data_seguro_fianca}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            data_seguro_fianca: e.target.value
           })
         }
       />
@@ -118,46 +172,5 @@ export const ContractDetailsSection = ({
         <option value="dezembro">Dezembro</option>
       </select>
     </TwoColumnGrid>
-
-    <FloatingInput
-      id="valor_pagamento"
-      label="Valor do pagamento (R$)"
-      value={formData.valor_pagamento}
-      onChange={(e) => {
-        const value = e.target.value;
-        const numero = parseFloat(
-          value.replaceAll(".", "").replaceAll(",", "."),
-        );
-
-        let valor_escrito = "";
-
-        try {
-          valor_escrito = extenso(numero, {
-            mode: "currency",
-            currency: { type: "BRL" },
-          });
-        } catch (error) {
-          valor_escrito = "Valor inválido";
-        }
-        setFormData({
-          ...formData,
-          valor_pagamento: value,
-          valor_escrito: valor_escrito,
-        });
-      }}
-      mask={{
-        numeral: true,
-        numeralDecimalMark: ",",
-        delimiter: ".",
-        numeralDecimalScale: 2,
-      }}
-      prefix="R$"
-    />
-    {!formData.valor_escrito ||
-    formData.valor_escrito.includes("undefined") ? null : (
-      <p className="text-sm text-gray-500">
-        <strong>Extenso:</strong> {formData.valor_escrito}
-      </p>
-    )}
   </Section>
 );
