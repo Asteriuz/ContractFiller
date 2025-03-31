@@ -235,7 +235,7 @@ export default function Form() {
 
       // change data_assinatura from dd-mm-yyyy to dd de mm de yyyy
       if (formCaucaoData.data_assinatura) {
-        formCaucaoData.data_assinatura = formatDateExtenso(formCaucaoData.data_assinatura);w
+        formCaucaoData.data_assinatura = formatDateExtenso(formCaucaoData.data_assinatura);
       }
     }
 
