@@ -1,11 +1,13 @@
 import FloatingInput from "./FloatingInput";
-import { IFormFiancaData } from "@/types/IFormData";
+import { IFormCaucaoData, IFormFiancaData } from "@/types/IFormData";
 import { useState } from "react";
 import { estados } from "@/app/utils/estados";
 
 interface EnderecoInputProps {
-  formData: IFormFiancaData;
-  setFormData: React.Dispatch<React.SetStateAction<IFormFiancaData>>;
+  formData: IFormFiancaData | IFormCaucaoData;
+  setFormData: React.Dispatch<
+    React.SetStateAction<IFormFiancaData | IFormCaucaoData>
+  >;
   prefix: "dono" | "inquilino" | "imovel";
 }
 
@@ -67,7 +69,7 @@ const EnderecoInput = ({
         <FloatingInput
           id={getField("cep")}
           label="CEP"
-          value={formData[getField("cep")]}
+          value={formData[getField("cep") as keyof typeof formData]}
           onChange={(e) => handleCepChange(e.target.value)}
           mask={{
             delimiters: ["-"],
@@ -83,7 +85,7 @@ const EnderecoInput = ({
       <FloatingInput
         id={getField("logradouro")}
         label="Logradouro"
-        value={formData[getField("logradouro")]}
+        value={formData[getField("logradouro") as keyof typeof formData]}
         onChange={(e) =>
           setFormData((prev) => ({
             ...prev,
@@ -96,7 +98,7 @@ const EnderecoInput = ({
         <FloatingInput
           id={getField("numero")}
           label="Número"
-          value={formData[getField("numero")]}
+          value={formData[getField("numero") as keyof typeof formData]}
           onChange={(e) =>
             setFormData((prev) => ({
               ...prev,
@@ -107,7 +109,7 @@ const EnderecoInput = ({
         <FloatingInput
           id={getField("complemento")}
           label="Complemento (Opcional)"
-          value={formData[getField("complemento")]}
+          value={formData[getField("complemento") as keyof typeof formData]}
           onChange={(e) =>
             setFormData((prev) => ({
               ...prev,
@@ -122,7 +124,7 @@ const EnderecoInput = ({
         <FloatingInput
           id={getField("cidade")}
           label="Cidade"
-          value={formData[getField("cidade")]}
+          value={formData[getField("cidade") as keyof typeof formData]}
           onChange={(e) =>
             setFormData((prev) => ({
               ...prev,
@@ -136,7 +138,7 @@ const EnderecoInput = ({
             aria-label="Estado"
             required
             className="h-full w-full rounded-lg border border-gray-300 px-2.5 py-3 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-            value={formData[getField("estado")]}
+            value={formData[getField("estado") as keyof typeof formData]}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
@@ -156,7 +158,7 @@ const EnderecoInput = ({
         <FloatingInput
           id={getField("bairro")}
           label="Bairro"
-          value={formData[getField("bairro")]}
+          value={formData[getField("bairro") as keyof typeof formData]}
           onChange={(e) =>
             setFormData((prev) => ({
               ...prev,

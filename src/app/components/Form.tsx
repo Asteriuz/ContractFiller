@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FloatingInput from "./FormLayout/FloatingInput";
 
 import PizZip from "pizzip";
@@ -10,10 +10,16 @@ import { OwnerSection } from "./FormSections/OwnerSection";
 import { TenantSection } from "./FormSections/TenantSection";
 import { PropertySection } from "./FormSections/PropertySection";
 import { ContractDetailsSection } from "./FormSections/ContractDetailsSection";
-import { FaBug, FaFileAlt, FaFileSignature } from "react-icons/fa";
-import { IFormFiancaData } from "@/types/IFormData";
-import formatDate from "../utils/formatDate";
-import { debugFiancaData } from "../utils/debugFiancaData";
+import {
+  FaBug,
+  FaFileAlt,
+  FaFileContract,
+  FaFileSignature,
+  FaShieldAlt,
+} from "react-icons/fa";
+import { IFormCaucaoData, IFormFiancaData } from "@/types/IFormData";
+import formatDate, { formatDateExtenso } from "../utils/formatDate";
+import { debugCaucaoData, debugFiancaData } from "../utils/debugData";
 
 let PizZipUtils: { getBinaryContent?: any; default?: any } | null = null;
 if (typeof window !== "undefined") {
@@ -25,11 +31,12 @@ if (typeof window !== "undefined") {
 export default function Form() {
   const [isLoading, setIsLoading] = useState(false);
   const [nomeArquivo, setNomeArquivo] = useState("contrato-locacao");
-  const [tipoContrato, setTipoContrato] = useState<"Fianca" | "Caucao">(
-    "Fianca",
+  const [tipoContrato, setTipoContrato] = useState<"Fianca" | "Caucao" | "">(
+    "",
   );
 
   const [formFiancaData, setFormFiancaData] = useState<IFormFiancaData>({
+    form_tipo: "fianca",
     // Dono
     nome_dono: "",
     rg_dono: "",
@@ -82,6 +89,77 @@ export default function Form() {
     valor_aluguel_escrito: "",
   });
 
+  const [formCaucaoData, setFormCaucaoData] = useState<IFormCaucaoData>({
+    // Dono
+    form_tipo: "caucao",
+    nome_dono: "",
+    rg_dono: "",
+    orgao_rg_dono: "",
+    cpf_dono: "",
+    cep_dono: "",
+    logradouro_dono: "",
+    numero_dono: "",
+    complemento_dono: "",
+    bairro_dono: "",
+    cidade_dono: "",
+    estado_dono: "",
+
+    // Inquilino
+    nome_inquilino: "",
+    rg_inquilino: "",
+    orgao_rg_inquilino: "",
+    cpf_inquilino: "",
+    estado_civil: "",
+    profissao: "",
+    cep_inquilino: "",
+    logradouro_inquilino: "",
+    numero_inquilino: "",
+    complemento_inquilino: "",
+    bairro_inquilino: "",
+    cidade_inquilino: "",
+    estado_inquilino: "",
+
+    // Dados do Imóvel
+    cep_imovel: "",
+    logradouro_imovel: "",
+    numero_imovel: "",
+    complemento_imovel: "",
+    bairro_imovel: "",
+    cidade_imovel: "",
+    estado_imovel: "",
+
+    // Detalhes do Contrato
+    dia_pagamento_aluguel: "",
+    dia_pagamento_escrito: "",
+    numero_luz_enel: "",
+    inicio_locacao: "",
+    inicio_mes_locacao: "",
+    fim_locacao: "",
+    fim_mes_locacao: "",
+    valor_aluguel: "",
+    valor_aluguel_escrito: "",
+    valor_caucao: "",
+    valor_caucao_escrito: "",
+    data_seguro_caucao: "",
+    data_assinatura: "",
+  });
+
+  useEffect(() => {
+    if (tipoContrato === "Fianca") {
+      Object.entries(formFiancaData).forEach(([key, value]) => {
+        if (value === undefined) {
+          console.warn(`Undefined field detected in formFiancaData: ${key}`);
+        }
+      });
+    } else {
+      Object.entries(formCaucaoData).forEach(([key, value]) => {
+        if (value === undefined) {
+          console.warn(`Undefined field detected in formCaucaoData: ${key}`);
+        }
+      });
+    }
+  }, [formFiancaData, formCaucaoData, tipoContrato]);
+
   const handleDebugFill = () => {
     switch (tipoContrato) {
       case "Fianca":
@@ -90,7 +168,7 @@ export default function Form() {
         break;
       case "Caucao":
         setNomeArquivo("debug-contrato-caucao");
-        console.log("Caução ainda não implementado");
+        setFormCaucaoData({ ...formCaucaoData, ...debugCaucaoData });
         break;
     }
   };
@@ -122,16 +200,44 @@ export default function Form() {
     e.preventDefault();
     setIsLoading(true);
 
-    formFiancaData.inicio_locacao = formatDate(formFiancaData.inicio_locacao);
-    formFiancaData.fim_locacao = formatDate(formFiancaData.fim_locacao);
-    formFiancaData.data_seguro_fianca = formatDate(
-      formFiancaData.data_seguro_fianca,
-    );
+    if (tipoContrato === "Fianca") {
+      formFiancaData.inicio_locacao = formatDate(formFiancaData.inicio_locacao);
+      formFiancaData.fim_locacao = formatDate(formFiancaData.fim_locacao);
 
-    formFiancaData.valor_aluguel = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(Number(formFiancaData.valor_aluguel.replaceAll(".", "").replaceAll(",", ".")));
+      if (formFiancaData.data_seguro_fianca) {
+        formFiancaData.data_seguro_fianca = formatDate(
+          formFiancaData.data_seguro_fianca,
+        );
+      } else {
+        formFiancaData.data_seguro_fianca = "";
+      }
+
+      formFiancaData.valor_aluguel = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(
+        Number(
+          formFiancaData.valor_aluguel.replaceAll(".", "").replaceAll(",", "."),
+        ),
+      );
+    } else {
+      formCaucaoData.inicio_locacao = formatDate(formCaucaoData.inicio_locacao);
+      formCaucaoData.fim_locacao = formatDate(formCaucaoData.fim_locacao);
+
+      formCaucaoData.valor_aluguel = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(
+        Number(
+          formCaucaoData.valor_aluguel.replaceAll(".", "").replaceAll(",", "."),
+        ),
+      );
+
+      // change data_assinatura from dd-mm-yyyy to dd de mm de yyyy
+      if (formCaucaoData.data_assinatura) {
+        formCaucaoData.data_assinatura = formatDateExtenso(formCaucaoData.data_assinatura);w
+      }
+    }
 
     let templatePath = "/ContractFiller/templateFianca.docx";
     switch (tipoContrato) {
@@ -156,7 +262,7 @@ export default function Form() {
       });
 
       try {
-        doc.render(formFiancaData);
+        doc.render(tipoContrato === "Fianca" ? formFiancaData : formCaucaoData);
       } catch (error) {
         console.error("Error rendering the document", error);
         setIsLoading(false);
@@ -200,47 +306,119 @@ export default function Form() {
         </p>
       </div>
 
-      <div className="space-y-6">
-        <OwnerSection
-          formData={formFiancaData}
-          setFormData={setFormFiancaData}
-        />
-        <TenantSection
-          formData={formFiancaData}
-          setFormData={setFormFiancaData}
-        />
-        <PropertySection
-          formData={formFiancaData}
-          setFormData={setFormFiancaData}
-        />
-        <ContractDetailsSection
-          formData={formFiancaData}
-          setFormData={setFormFiancaData}
-        />
+      <div className="mb-8">
+        <div className={`border-b border-gray-300 pb-6`}>
+          <div className="mb-5 flex items-center justify-between">
+            <h3 className="font-source-serif text-xl font-semibold text-gray-700">
+              Tipo de Contrato
+            </h3>
+            <FaShieldAlt className="text-2xl text-gray-700" />
+          </div>
+          <div className="space-y-4">
+            <div className="flex gap-3">
+              <label className="flex-1 cursor-pointer">
+                <input
+                  type="radio"
+                  name="tipo_contrato"
+                  value="Fianca"
+                  className="peer hidden"
+                  checked={tipoContrato === "Fianca"}
+                  onChange={() => setTipoContrato("Fianca")}
+                />
+                <div className="rounded-lg border-2 border-gray-200 bg-white p-4 text-center transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:ring-1 peer-checked:ring-blue-300">
+                  <span className="text-md block font-medium text-gray-600 peer-checked:text-blue-700">
+                    Fiança
+                  </span>
+                </div>
+              </label>
 
-        <button
-          type="button"
-          onClick={handleDebugFill}
-          className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white transition-colors duration-300 hover:bg-red-700"
-        >
-          Preencher Automaticamente
-          <FaBug className="ml-2 inline-block" />
-        </button>
-
-        <button
-          type="submit"
-          className="w-full cursor-pointer rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors duration-300 hover:bg-blue-700"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            "Gerando..."
-          ) : (
-            <div className="flex items-center justify-center">
-              Gerar o Contrato
-              <FaFileAlt className="ml-2 inline-block" />
+              <label className="flex-1 cursor-pointer">
+                <input
+                  type="radio"
+                  name="tipo_contrato"
+                  value="Caucao"
+                  className="peer hidden"
+                  checked={tipoContrato === "Caucao"}
+                  onChange={() => setTipoContrato("Caucao")}
+                />
+                <div className="rounded-lg border-2 border-gray-200 bg-white p-4 text-center transition-all peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:ring-1 peer-checked:ring-green-300">
+                  <span className="text-md block font-medium text-gray-600 peer-checked:text-green-700">
+                    Caução
+                  </span>
+                </div>
+              </label>
             </div>
-          )}
-        </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        {tipoContrato === "Fianca" ? (
+          <>
+            <OwnerSection
+              formData={formFiancaData}
+              setFormData={setFormFiancaData}
+            />
+            <TenantSection
+              formData={formFiancaData}
+              setFormData={setFormFiancaData}
+            />
+            <PropertySection
+              formData={formFiancaData}
+              setFormData={setFormFiancaData}
+            />
+            <ContractDetailsSection
+              formData={formFiancaData}
+              setFormData={setFormFiancaData}
+            />
+          </>
+        ) : tipoContrato === "Caucao" ? (
+          <>
+            <OwnerSection
+              formData={formCaucaoData}
+              setFormData={setFormCaucaoData}
+            />
+            <TenantSection
+              formData={formCaucaoData}
+              setFormData={setFormCaucaoData}
+            />
+            <PropertySection
+              formData={formCaucaoData}
+              setFormData={setFormCaucaoData}
+            />
+            <ContractDetailsSection
+              formData={formCaucaoData}
+              setFormData={setFormCaucaoData}
+            />
+          </>
+        ) : null}
+
+        {tipoContrato && (
+          <>
+            <button
+              type="button"
+              onClick={handleDebugFill}
+              className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white transition-colors duration-300 hover:bg-red-700"
+            >
+              Preencher Automaticamente
+              <FaBug className="ml-2 inline-block" />
+            </button>
+            <button
+              type="submit"
+              className="w-full cursor-pointer rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors duration-300 hover:bg-blue-700"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                "Gerando..."
+              ) : (
+                <div className="flex items-center justify-center">
+                  Gerar o Contrato
+                  <FaFileAlt className="ml-2 inline-block" />
+                </div>
+              )}
+            </button>
+          </>
+        )}
       </div>
     </form>
   );

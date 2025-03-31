@@ -8,4 +8,15 @@ const formatDate = (dateString: string | number | Date) => {
   return `${day}/${month}/${year}`;
 };
 
+export function formatDateExtenso(dateStr: string) {
+  const [year, month, day] = dateStr.split('-');
+  const monthNames = [
+    'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+    'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+  ];
+  const monthName = monthNames[parseInt(month) - 1];
+  
+  return `${day} de ${monthName} de ${year}`;
+}
+
 export default formatDate;
